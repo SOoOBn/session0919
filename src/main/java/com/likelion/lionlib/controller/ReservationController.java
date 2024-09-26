@@ -1,6 +1,7 @@
 package com.likelion.lionlib.controller;
 
 import com.likelion.lionlib.domain.Reservation;
+import com.likelion.lionlib.dto.CountReservationResponse;
 import com.likelion.lionlib.dto.ReservationRequest;
 import com.likelion.lionlib.dto.ReservationResponse;
 import com.likelion.lionlib.service.ReservationService;
@@ -57,10 +58,10 @@ public class ReservationController {
 
     // 도서 예약 수 현황 조회
     @GetMapping("/books/{bookId}/reservations")
-    public ResponseEntity<Long> countBookReservations(@PathVariable("bookId") Long bookId) {
+    public ResponseEntity<CountReservationResponse> countBookReservations(@PathVariable("bookId") Long bookId) {
         log.info("Request GET the count of reservations with bookId: {}", bookId);
-        Long reservationCount = reservationService.countBookReservations(bookId);
-        return ResponseEntity.ok(reservationCount);
+        CountReservationResponse response = reservationService.countBookReservations(bookId);
+        return ResponseEntity.ok(response);
     }
 
 }

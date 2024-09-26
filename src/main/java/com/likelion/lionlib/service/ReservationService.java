@@ -3,6 +3,7 @@ package com.likelion.lionlib.service;
 import com.likelion.lionlib.domain.Book;
 import com.likelion.lionlib.domain.Member;
 import com.likelion.lionlib.domain.Reservation;
+import com.likelion.lionlib.dto.CountReservationResponse;
 import com.likelion.lionlib.dto.ReservationRequest;
 import com.likelion.lionlib.dto.ReservationResponse;
 import com.likelion.lionlib.repository.ReservationRepository;
@@ -51,8 +52,9 @@ public class ReservationService {
     }
 
     // 도서 예약 수 현황 조회
-    public Long countBookReservations (Long bookId) {
+    public CountReservationResponse countBookReservations (Long bookId) {
         Book book = globalService.findBookById(bookId);
-        return reservationRepository.countByBook(book);
+        Long count = reservationRepository.countByBook(book);
+        return new CountReservationResponse(count);
     }
 }
