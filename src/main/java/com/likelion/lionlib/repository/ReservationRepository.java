@@ -15,4 +15,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     // 도서 예약 수 현황 조회
     Long countByBook(Book book);
 
+    // 사용자의 예약 중복 확인
+    boolean existsByMemberAndBook(Member member, Book book);
 }

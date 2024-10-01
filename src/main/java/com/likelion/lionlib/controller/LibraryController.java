@@ -1,14 +1,12 @@
 package com.likelion.lionlib.controller;
 
-import com.likelion.lionlib.dto.BookRequest;
-import com.likelion.lionlib.dto.BookResponse;
-import com.likelion.lionlib.dto.LoanRequest;
-import com.likelion.lionlib.dto.LoanResponse;
+import com.likelion.lionlib.dto.*;
 import com.likelion.lionlib.service.BookService;
 import com.likelion.lionlib.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,9 +66,9 @@ public class LibraryController {
 
     // 도서 대출 등록
     @PostMapping("/loans")
-    public ResponseEntity<LoanResponse> addLoan(@RequestBody LoanRequest loanRequest) {
+    public ResponseEntity<LoanResponse> addLoan(@RequestBody LoanRequest loanRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         log.info("Request POST a loan: {}", loanRequest);
-        LoanResponse savedLoan = loanService.addLoan(loanRequest);
+        LoanResponse savedLoan = loanService.addLoan(customUserDetails, loanRequest);
         log.info("Response POST a loan: {}", savedLoan);
         return ResponseEntity.ok(savedLoan);
     }
@@ -94,10 +92,10 @@ public class LibraryController {
     }
 
     // 사용자의 대출 목록 조회
-    @GetMapping("/members/{memberId}/loans")
-    public ResponseEntity<List<LoanResponse>> getLoansByMemberId(@PathVariable Long memberId) {
-        log.info("Request GET loans for member with ID: {}", memberId);
-        List<LoanResponse> loans = loanService.getLoansByMemberId(memberId);
+    @GetMapping("/members/loans")
+    public ResponseEntity<List<LoanResponse>> getLoansByMemberId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        log.info("Request GET loans for member with ID: {}", customUserDetails.getId());
+        List<LoanResponse> loans = loanService.getLoansByMemberId(customUserDetails);
         log.info("Response GET loans for member: {}", loans);
         return ResponseEntity.ok(loans);
     }
